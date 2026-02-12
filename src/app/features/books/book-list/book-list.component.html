@@ -1,0 +1,34 @@
+<p>book-list works!</p>
+
+
+
+
+<h2>Book List</h2>
+
+<input
+  type="text"
+  [(ngModel)]="searchTerm"
+  placeholder="Search by title"
+/>
+
+<p>Characters typed: {{ searchTerm.length }}</p>
+
+<button [disabled]="!searchTerm">
+  Search
+</button>
+
+<ul>
+  <li *ngFor="let book of books">
+    <strong>{{ book.title }}</strong>
+    - {{ book.author }}
+    <span *ngIf="book.available"> ||||  available</span>
+    <span *ngIf="!book.available">||||| not available</span>
+
+    <button (click)="toggleAvailability(book)">
+      Toggle disponibilite
+    </button>
+  </li>
+</ul>
+
+<p>Total available books: {{ availableBooksCount }}</p>
+

@@ -1,0 +1,20 @@
+{
+  "books": [
+    {
+      "id": 1,
+      "title": "Clean Code",
+      "author": "Robert Martin",
+      "available": true,
+      "category": "Programming",
+      "publishedYear": 2008
+    },
+    {
+      "id": 2,
+      "title": "1984",
+      "author": "George Orwell",
+      "available": false,
+      "category": "Fiction",
+      "publishedYear": 1949
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+<p>booksexercice2 works!</p>
+
+<div *ngIf="loading">Loading...</div>
+<div *ngIf="error">{{ error }}</div>
+
+<ul *ngIf="books().length > 0">
+  <li *ngFor="let book of books()">
+    {{ book.title }} - {{ book.author }}
+    <button (click)="selectBook(book)">Update</button>
+  </li>
+</ul>
+
+<hr>
+
+<form [formGroup]="updateForm" (ngSubmit)="onSubmitUpdate()">
+  <input formControlName="id" placeholder="ID" readonly />
+  <input formControlName="title" placeholder="Title" />
+  <input formControlName="author" placeholder="Author" />
+  <input formControlName="available" placeholder="Available" />
+  <input formControlName="category" placeholder="Category" />
+  <input formControlName="publishedYear" placeholder="Published Year" />
+
+  <button type="submit">Save</button>
+</form>
