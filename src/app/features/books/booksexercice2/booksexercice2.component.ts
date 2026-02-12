@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Book } from '../../../models/book';
 import { BookService } from '../../../core/services/book.service';
@@ -20,10 +20,19 @@ export class Booksexercice2Component {
     private fb = inject(FormBuilder)
     loading = false;
     error = '';
-    books = toSignal(this.bookService.getBooks(), {
-        initialValue: []
-      }); 
 
+    books = signal<Book[]>([]);
+
+
+    constructor() {
+  this.loadBooks();
+}
+    loadBooks() {
+      this.bookService.getBooks().subscribe({
+        next: (data) => this.books.set(data),
+        error: () => (this.error = 'Failed to load books')
+      });
+}
 
       
       updateForm: FormGroup = this.fb.group({
@@ -42,8 +51,21 @@ export class Booksexercice2Component {
 
 
      
+        onSubmitDelete(id : number): void{
+            this.bookService.deleteBook(id).subscribe({
+              next:() =>{
+                console.log("Book deleted");
+                const updateBook = this.books().filter(b => b.id !== id);
+                this.books.set(updateBook);
+              } ,
+              error : ()=>{
+                this.error = 'delete failed'
+              }
+            })
+        }
         onSubmitUpdate(): void {
           if (this.updateForm.invalid) return;
+
 
           const book: Book = this.updateForm.value;
           console.log('book updated');
@@ -51,7 +73,10 @@ export class Booksexercice2Component {
           this.bookService.updateBook(book.id, book).subscribe({
             next: () => {
               console.log('book updated');
-            },
+              // this.books = toSignal(this.bookService.getBooks() , {initialValue: []})
+              const updatedBooks = this.books().map(b => b.id === book.id ? book : b)
+      this.books.set(updatedBooks);         
+        },
             error: () => {
               this.error = 'update failed';
             }
